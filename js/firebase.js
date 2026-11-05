@@ -9,7 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 import {
   connectFirestoreEmulator,
-  getFirestore,
+  initializeFirestore,
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 import { emulator, firebaseConfig } from "../firebase-config.js";
 
@@ -37,7 +37,10 @@ const app = initializeApp(
 );
 
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Safari en iPhone retiene o corta a veces la conexión de streaming que Firestore usa por
+// defecto, y las actualizaciones llegan con retraso. Long polling funciona en todos los
+// navegadores y no cambia el consumo de lecturas.
+export const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
 if (emulator.enabled) {
   connectAuthEmulator(auth, `http://${emulator.host}:${emulator.authPort}`, { disableWarnings: true });
