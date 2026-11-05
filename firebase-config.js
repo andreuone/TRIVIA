@@ -10,7 +10,8 @@ export const firebaseConfig = {
 
 // En localhost la app usa siempre el emulador y nunca toca tu proyecto real.
 export const emulator = {
-  enabled: ["localhost", "127.0.0.1"].includes(location.hostname),
+  // globalThis permite importar este archivo desde Node (tests/live-bots.js).
+  enabled: ["localhost", "127.0.0.1"].includes(globalThis.location?.hostname),
   host: "127.0.0.1",
   authPort: 9099,
   firestorePort: 8080,

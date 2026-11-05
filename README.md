@@ -127,6 +127,24 @@ Para cambiar el tamaño de la simulación, arranca el emulador como se indica ab
 node tests/load-bots.js --players=100 --questions=20 --limit=4
 ```
 
+### Prueba con bots en Firebase real
+
+[tests/live-bots.js](tests/live-bots.js) une bots a una partida real que creas tú desde `host.html` en tu web publicada. Gasta cuota real: con 200 bots y 10 preguntas, unas 6.800 lecturas y 2.400 escrituras.
+
+1. Abre `host.html` en tu web publicada, pulsa **Crear sala** y anota el PIN.
+2. Desde la carpeta `tests`, ejecuta el comando siguiente, cambiando el PIN por el tuyo:
+
+```bash
+node live-bots.js --pin=123456 --players=200
+```
+
+3. Cuando el contador del anfitrión llegue a 200, pulsa **Empezar** y juega la partida hasta el podio. Puedes unirte también con tus móviles.
+4. Al terminar, el script muestra un resumen por pregunta: cuántos bots la recibieron y con cuánto retraso, cuántas respuestas enviaron y cuántas contó el anfitrión.
+
+Las cuentas de los bots se guardan en `tests/.bot-accounts.json`, que no se sube a GitHub, y se reutilizan en cada ejecución. Si Firebase rechaza crear más por el límite de cuentas por IP, el script indica cuántos bots entraron. Al volver a ejecutarlo una hora después se reutilizan las cuentas ya creadas y se crean las que falten.
+
+Con `--emulator`, el script se une a una partida del emulador local en vez de a tu proyecto real.
+
 ### Jugar en local
 
 En `localhost` la app se conecta sola al emulador y no toca tu proyecto real. Cada pestaña es un usuario distinto, así que puedes simular varios jugadores en el mismo navegador. Ejecuta cada comando en su propia terminal, desde la carpeta del proyecto:

@@ -6,7 +6,8 @@
     "test:unit": "node --test scoring.test.js",
     "test:rules": "cd .. && firebase emulators:exec --only firestore --project demo-trivia \"node --test tests/rules.test.js\"",
     "test:load": "cd .. && firebase emulators:exec --only auth,firestore --project demo-trivia \"node tests/load-bots.js --players=250 --questions=16\"",
-    "test": "npm run test:unit && npm run test:rules && npm run test:load"
+    "test": "npm run test:unit && npm run test:rules && npm run test:load",
+    "live": "node live-bots.js"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^6.0.0",
