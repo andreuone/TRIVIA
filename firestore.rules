@@ -1,0 +1,116 @@
+rules_version = '2';
+
+// IMPORTANTE PARA LA CUOTA: estas reglas no usan get() ni exists() a propósito.
+// Firebase cobra cada una de esas llamadas como una lectura, así que validar cada
+// respuesta contra la partida costaría una lectura extra por respuesta.
+// En su lugar, cada documento lleva una copia de hostUid. Falsificarla solo perjudica
+// a quien lo hace: el anfitrión filtra por su propio uid y no vería ese documento.
+// Que la pregunta siga abierta lo valida el anfitrión con timestamps del servidor.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function me() {
+      return request.auth.uid;
+    }
+
+    function onlyChanges(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+
+    function validNick(nick) {
+      return nick is string && nick.size() >= 1 && nick.size() <= 20;
+    }
+
+    match /games/{pin} {
+      function validPhase(data) {
+        return data.phase in ['lobby', 'question', 'reveal', 'end'];
+      }
+
+      // La respuesta correcta solo puede estar en el documento durante el reveal.
+      function correctOnlyOnReveal(data) {
+        return data.phase == 'reveal' || !('correct' in data);
+      }
+
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && pin.matches('^[0-9]{6}$')
+        && request.resource.data.hostUid == me()
+        && request.resource.data.phase == 'lobby'
+        && correctOnlyOnReveal(request.resource.data);
+
+      // Volver a 'lobby' solo es posible desde 'lobby'. Así, crear una sala con un PIN
+      // ya usado por el mismo anfitrión falla en vez de pisar una partida anterior.
+      allow update: if signedIn()
+        && resource.data.hostUid == me()
+        && request.resource.data.hostUid == me()
+        && validPhase(request.resource.data)
+        && correctOnlyOnReveal(request.resource.data)
+        && (request.resource.data.phase != 'lobby' || resource.data.phase == 'lobby');
+
+      allow delete: if false;
+
+      match /players/{playerId} {
+        allow get: if signedIn()
+          && (playerId == me() || resource.data.hostUid == me());
+
+        // El anfitrión debe filtrar con where('hostUid', '==', suUid).
+        allow list: if signedIn() && resource.data.hostUid == me();
+
+        allow create: if signedIn()
+          && playerId == me()
+          && request.resource.data.keys().hasOnly(['nick', 'hostUid', 'score', 'joinedAt'])
+          && request.resource.data.keys().hasAll(['nick', 'hostUid', 'score', 'joinedAt'])
+          && validNick(request.resource.data.nick)
+          && request.resource.data.hostUid is string
+          && request.resource.data.score == 0
+          && request.resource.data.joinedAt == request.time;
+
+        // El jugador solo cambia su apodo; el anfitrión solo cambia el puntaje.
+        allow update: if signedIn() && (
+          (playerId == me()
+            && onlyChanges(['nick'])
+            && validNick(request.resource.data.nick))
+          ||
+          (resource.data.hostUid == me()
+            && onlyChanges(['score'])
+            && request.resource.data.score is int
+            && request.resource.data.score >= 0)
+        );
+
+        allow delete: if false;
+      }
+
+      match /answers/{answerId} {
+        // Solo el anfitrión, que debe filtrar con where('hostUid', '==', suUid).
+        allow get: if signedIn() && resource.data.hostUid == me();
+        allow list: if signedIn() && resource.data.hostUid == me();
+
+        // Crear sobre un documento existente cuenta como update y se rechaza:
+        // eso garantiza una sola respuesta por jugador y pregunta.
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['qIndex', 'uid', 'hostUid', 'choice', 'answeredAt'])
+          && request.resource.data.keys().hasAll(['qIndex', 'uid', 'hostUid', 'choice', 'answeredAt'])
+          && request.resource.data.uid == me()
+          && request.resource.data.hostUid is string
+          && request.resource.data.qIndex is int
+          && request.resource.data.qIndex >= 0
+          && answerId == string(request.resource.data.qIndex) + '_' + me()
+          && request.resource.data.choice is int
+          && request.resource.data.choice >= 0
+          && request.resource.data.choice <= 3
+          && request.resource.data.answeredAt == request.time;
+
+        allow update, delete: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

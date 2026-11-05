@@ -1,0 +1,15 @@
+{
+  "title": "Cultura general",
+  "questions": [
+    { "text": "¿Cuál es la capital de Australia?", "options": ["Sídney", "Melbourne", "Canberra", "Perth"], "correct": 2, "timeLimit": 20, "imageUrl": "" },
+    { "text": "¿Cuál es el planeta más grande del sistema solar?", "options": ["Júpiter", "Saturno", "Neptuno", "La Tierra"], "correct": 0, "timeLimit": 15, "imageUrl": "" },
+    { "text": "¿Quién escribió «Cien años de soledad»?", "options": ["Mario Vargas Llosa", "Julio Cortázar", "Pablo Neruda", "Gabriel García Márquez"], "correct": 3, "timeLimit": 20, "imageUrl": "" },
+    { "text": "¿Qué elemento químico tiene el símbolo Au?", "options": ["Plata", "Oro", "Aluminio", "Argón"], "correct": 1, "timeLimit": 15, "imageUrl": "" },
+    { "text": "¿Cuál es el océano más grande del mundo?", "options": ["Atlántico", "Índico", "Pacífico", "Ártico"], "correct": 2, "timeLimit": 15, "imageUrl": "" },
+    { "text": "¿Cuántos lados tiene un hexágono?", "options": ["Seis", "Cinco", "Ocho", "Siete"], "correct": 0, "timeLimit": 10, "imageUrl": "" },
+    { "text": "¿Qué selección ganó el Mundial de fútbol de 2010?", "options": ["Países Bajos", "Alemania", "Brasil", "España"], "correct": 3, "timeLimit": 20, "imageUrl": "" },
+    { "text": "¿Qué idioma tiene más hablantes nativos en el mundo?", "options": ["Inglés", "Chino mandarín", "Español", "Hindi"], "correct": 1, "timeLimit": 20, "imageUrl": "" },
+    { "text": "¿Quién pintó el «Guernica»?", "options": ["Salvador Dalí", "Joan Miró", "Pablo Picasso", "Diego Velázquez"], "correct": 2, "timeLimit": 15, "imageUrl": "" },
+    { "text": "¿En qué año pisó por primera vez un ser humano la Luna?", "options": ["1969", "1957", "1975", "1961"], "correct": 0, "timeLimit": 20, "imageUrl": "" }
+  ]
+}

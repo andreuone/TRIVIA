@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2a1458">
+  <title>Trivia: anfitrión</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="host-page">
+  <p id="host-banner" class="host-banner" role="alert" hidden></p>
+
+  <section id="screen-setup" class="screen setup">
+    <header class="setup-header">
+      <h1 class="logo">Trivia</h1>
+      <a class="subtle-link" href="index.html">Unirse a una partida</a>
+    </header>
+
+    <div id="resume-box" class="resume-box" hidden>
+      <p id="resume-text"></p>
+      <div class="button-row">
+        <button id="resume-button" class="btn btn-primary" type="button">Continuar</button>
+        <button id="discard-button" class="btn btn-ghost" type="button">Descartar</button>
+      </div>
+    </div>
+
+    <div class="editor-toolbar">
+      <h2 id="editor-count">Preguntas</h2>
+      <div class="button-row">
+        <button id="editor-add" class="btn btn-ghost" type="button">Añadir pregunta</button>
+        <button id="editor-sample" class="btn btn-ghost" type="button">Cargar ejemplo</button>
+        <label class="btn btn-ghost" for="editor-import">Importar JSON</label>
+        <input id="editor-import" class="visually-hidden" type="file" accept="application/json,.json">
+        <button id="editor-export" class="btn btn-ghost" type="button">Exportar JSON</button>
+      </div>
+    </div>
+    <p id="editor-message" class="status-text" role="status"></p>
+    <div id="editor-list" class="editor-list"></div>
+    <ul id="editor-errors" class="editor-errors"></ul>
+
+    <div class="sticky-action">
+      <button id="create-button" class="btn btn-primary btn-large" type="button">Crear sala</button>
+    </div>
+  </section>
+
+  <section id="screen-lobby" class="screen lobby" hidden>
+    <div class="lobby-join">
+      <div>
+        <p class="lobby-label">Entra en</p>
+        <p id="lobby-url" class="lobby-url"></p>
+        <p class="lobby-label">PIN de la partida</p>
+        <p id="lobby-pin" class="lobby-pin"></p>
+      </div>
+      <div id="lobby-qr" class="lobby-qr" role="img" aria-label="Código QR para unirse a la partida"></div>
+    </div>
+    <div class="lobby-status">
+      <p class="lobby-count"><strong id="lobby-count">0</strong> jugadores</p>
+      <button id="start-button" class="btn btn-primary btn-large" type="button" disabled>Empezar</button>
+    </div>
+    <ul id="lobby-players" class="player-chips"></ul>
+  </section>
+
+  <section id="screen-question" class="screen host-question" hidden>
+    <header class="host-question-header">
+      <span id="question-counter" class="pill"></span>
+      <span class="pill"><strong id="answer-count">0</strong> respuestas</span>
+      <button id="skip-button" class="btn btn-ghost" type="button">Terminar ya</button>
+    </header>
+    <div class="timer-track"><div id="host-timer" class="timer-bar"></div></div>
+    <h2 id="question-text" class="host-question-text"></h2>
+    <div class="host-question-middle">
+      <p id="host-seconds" class="host-seconds"></p>
+      <img id="question-image" class="question-image" alt="" referrerpolicy="no-referrer" hidden>
+    </div>
+    <div id="question-options" class="host-options"></div>
+  </section>
+
+  <section id="screen-reveal" class="screen host-reveal" hidden>
+    <h2 id="reveal-text" class="host-question-text"></h2>
+    <div id="reveal-bars" class="reveal-bars"></div>
+    <div class="host-actions">
+      <p id="reveal-summary" class="pill"></p>
+      <button id="to-top-button" class="btn btn-primary btn-large" type="button">Ver top 5</button>
+    </div>
+  </section>
+
+  <section id="screen-leaderboard" class="screen host-leaderboard" hidden>
+    <h2 class="section-title">Top 5</h2>
+    <ol id="top-list" class="top-list"></ol>
+    <div class="host-actions">
+      <button id="next-button" class="btn btn-primary btn-large" type="button"></button>
+    </div>
+  </section>
+
+  <section id="screen-end" class="screen host-end" hidden>
+    <h2 class="section-title">¡Podio final!</h2>
+    <div id="podium" class="podium"></div>
+    <ol id="end-rest" class="top-list"></ol>
+    <div class="host-actions">
+      <a class="btn btn-primary" href="host.html">Nueva partida</a>
+    </div>
+  </section>
+
+  <script type="module" src="js/host.js"></script>
+</body>
+</html>

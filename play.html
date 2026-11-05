@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2a1458">
+  <title>Trivia: jugar</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="play-page">
+  <section id="screen-loading" class="screen play-message">
+    <p class="big-text">Conectando…</p>
+  </section>
+
+  <section id="screen-waiting" class="screen play-message" hidden>
+    <p class="big-text">¡Ya estás dentro!</p>
+    <p id="waiting-nick" class="nick-badge"></p>
+    <p>Mira la pantalla: la partida empieza pronto.</p>
+  </section>
+
+  <section id="screen-question" class="screen play-question" hidden>
+    <div class="timer-track"><div id="play-timer" class="timer-bar"></div></div>
+    <header class="play-header">
+      <span id="play-counter"></span>
+      <span id="play-seconds" class="play-seconds"></span>
+    </header>
+    <p id="play-text" class="play-text"></p>
+    <div id="play-options" class="play-grid"></div>
+    <p id="play-error" class="status-text" role="alert"></p>
+  </section>
+
+  <section id="screen-sent" class="screen play-message" hidden>
+    <p id="sent-shape" class="sent-shape" aria-hidden="true"></p>
+    <p class="big-text">Respuesta enviada</p>
+    <p>Espera el resultado…</p>
+  </section>
+
+  <section id="screen-timeout" class="screen play-message" hidden>
+    <p class="big-text">Se acabó el tiempo</p>
+    <p>Espera el resultado…</p>
+  </section>
+
+  <section id="screen-result" class="screen play-message" hidden>
+    <p id="result-title" class="result-title"></p>
+    <p id="result-points" class="result-points"></p>
+    <p id="result-detail" class="result-detail"></p>
+    <p id="result-correct" class="result-correct"></p>
+  </section>
+
+  <section id="screen-end" class="screen play-message" hidden>
+    <p class="big-text">¡Fin de la partida!</p>
+    <p id="end-position" class="result-title"></p>
+    <p id="end-score" class="result-detail"></p>
+    <a class="btn btn-primary" href="index.html">Jugar otra</a>
+  </section>
+
+  <section id="screen-error" class="screen play-message" hidden>
+    <p id="error-text" class="big-text"></p>
+    <a class="btn btn-primary" href="index.html">Volver</a>
+  </section>
+
+  <script type="module" src="js/play.js"></script>
+</body>
+</html>
