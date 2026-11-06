@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
-import { normalizeQuestions, validateQuestions } from "../js/questions.js";
+import { normalizeQuestions, normalizeTitle, validateQuestions } from "../js/questions.js";
 import {
   GRACE_MS,
   buildResults,
@@ -170,4 +170,12 @@ test("normalizeQuestions acepta lista u objeto y rechaza otras formas", () => {
   assert.equal(normalizeQuestions([validQuestion()]).length, 1);
   assert.equal(normalizeQuestions({ questions: [validQuestion()] }).length, 1);
   assert.throws(() => normalizeQuestions({ preguntas: [] }));
+});
+
+test("el nombre de la trivia es opcional, se recorta y se limita a 60 caracteres", () => {
+  assert.equal(normalizeTitle({ title: "  Fin de año  ", questions: [] }), "Fin de año");
+  assert.equal(normalizeTitle({ questions: [] }), "");
+  assert.equal(normalizeTitle([validQuestion()]), "");
+  assert.equal(normalizeTitle({ title: 42 }), "");
+  assert.equal(normalizeTitle({ title: "x".repeat(80) }).length, 60);
 });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#2a1458">
+  <meta name="theme-color" content="#f76300">
   <title>Trivia: anfitrión</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -25,6 +25,10 @@
     </div>
 
     <div class="pin-choice">
+      <div class="pin-choice-field pin-choice-title">
+        <label for="game-title-input">Nombre de la trivia <span>(opcional)</span></label>
+        <input id="game-title-input" class="title-input" maxlength="60" autocomplete="off" placeholder="Por ejemplo: Trivia de fin de año">
+      </div>
       <div class="pin-choice-field">
         <label for="custom-pin">PIN de la sala <span>(opcional)</span></label>
         <input id="custom-pin" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="6"
@@ -60,6 +64,7 @@
   </section>
 
   <section id="screen-lobby" class="screen lobby" hidden>
+    <h1 id="lobby-title" class="game-title"></h1>
     <div class="lobby-join">
       <div>
         <p class="lobby-label">Entra en</p>
@@ -78,6 +83,7 @@
 
   <section id="screen-question" class="screen host-question" hidden>
     <header class="host-question-header">
+      <span id="question-title" class="pill"></span>
       <span id="question-counter" class="pill"></span>
       <span class="pill"><strong id="answer-count">0</strong> respuestas</span>
       <button id="skip-button" class="btn btn-ghost" type="button">Terminar ya</button>
@@ -110,6 +116,7 @@
 
   <section id="screen-end" class="screen host-end" hidden>
     <h2 class="section-title">¡Podio final!</h2>
+    <p id="podium-title" class="podium-subtitle"></p>
     <div id="podium" class="podium"></div>
     <ol id="end-rest" class="top-list"></ol>
     <div class="host-actions">

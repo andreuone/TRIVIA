@@ -1,6 +1,7 @@
 // Pantalla del anfitrión. Calcula los puntajes y publica el estado.
 // Regla de oro para la cuota: cada escritura en games/{pin} se multiplica por el número de
 // jugadores, así que el temporizador, el conteo en vivo y el top 5 se quedan en esta pantalla.
+import { launchConfetti } from "./confetti.js";
 import { createEditor } from "./editor.js";
 import {
   collection,
@@ -42,6 +43,7 @@ let uid = null;
 let pin = null;
 let gameRef = null;
 let questions = [];
+let title = "";
 let totals = {};
 let qIndex = -1;
 let phase = null;
@@ -74,7 +76,7 @@ function reportError(error) {
 }
 
 function persist() {
-  store.set(STORAGE_KEY, { pin, hostUid: uid, questions, totals, qIndex, phase, view });
+  store.set(STORAGE_KEY, { pin, hostUid: uid, title, questions, totals, qIndex, phase, view });
 }
 
 function setView(name) {
@@ -181,6 +183,7 @@ async function createGame() {
   try {
     uid = await ensureUser();
     questions = structuredClone(editor.getQuestions());
+    title = editor.getTitle();
 
     // Sin lecturas: si el PIN ya existe, las reglas rechazan la escritura. Con PIN aleatorio
     // se prueba con otro; con PIN elegido se avisa, porque solo sirve para una partida.
@@ -190,6 +193,7 @@ async function createGame() {
       try {
         await setDoc(gameRef, {
           hostUid: uid,
+          title,
           phase: "lobby",
           qIndex: -1,
           qTotal: questions.length,
@@ -218,7 +222,15 @@ async function createGame() {
   }
 }
 
+function showTitle() {
+  $("lobby-title").textContent = title;
+  $("question-title").textContent = title;
+  $("podium-title").textContent = title;
+  document.title = title ? `${title}: anfitrión` : "Trivia: anfitrión";
+}
+
 function showLobby() {
+  showTitle();
   const joinUrl = joinUrlFor(pin);
   $("lobby-url").textContent = joinUrl.host + joinUrl.pathname.replace(/index\.html$/, "");
   $("lobby-pin").textContent = `${pin.slice(0, 3)} ${pin.slice(3)}`;
@@ -499,6 +511,7 @@ function showEnd(top5) {
   renderTopList($("end-rest"), top5.slice(3));
   view = "end";
   showScreen("end");
+  launchConfetti();
 }
 
 /* ---------- Avance y recuperación tras recargar ---------- */
@@ -524,6 +537,7 @@ async function resumeGame(saved) {
     pin = saved.pin;
     gameRef = doc(db, "games", pin);
     questions = saved.questions;
+    title = saved.title ?? "";
     totals = saved.totals ?? {};
     qIndex = saved.qIndex;
 
@@ -532,6 +546,8 @@ async function resumeGame(saved) {
     const data = snapshot.data();
     phase = data.phase;
     qIndex = data.qIndex;
+    title = data.title ?? title;
+    showTitle();
 
     // Si la recarga pilló justo tras publicar, el documento manda sobre lo guardado.
     if (data.results) {

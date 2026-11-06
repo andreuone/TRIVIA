@@ -8,6 +8,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "./firebase.js";
+import { launchConfetti } from "./confetti.js";
 import { $, SHAPE_NAMES, SHAPES, answerKey, el, formatNumber, joinedKey, showScreen, store } from "./ui.js";
 
 const pin = new URLSearchParams(location.search).get("pin") ?? "";
@@ -162,11 +163,18 @@ function renderReveal() {
 function renderEnd() {
   stopTimer();
   setBackground();
+  launchConfetti();
   const mine = game.results?.[uid];
   const total = Object.keys(game.results ?? {}).length;
   $("end-position").textContent = mine ? `Posición ${mine.r} de ${total}` : "Gracias por jugar";
   $("end-score").textContent = mine ? `${formatNumber(mine.s)} puntos` : "";
   showScreen("end");
+}
+
+function showTitle(title = "") {
+  $("waiting-title").textContent = title;
+  $("end-title").textContent = title;
+  document.title = title ? `${title}: jugar` : "Trivia: jugar";
 }
 
 function render() {
@@ -231,6 +239,7 @@ async function main() {
         return;
       }
       game = snapshot.data();
+      showTitle(game.title);
       const key = `${game.phase}:${game.qIndex}`;
       if (key !== lastKey) {
         lastKey = key;

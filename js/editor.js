@@ -1,12 +1,21 @@
 // Editor de preguntas. Se guardan solo en este navegador: nunca suben a Firestore completas.
-import { LIMITS, emptyQuestion, normalizeQuestions, validateQuestions } from "./questions.js";
+import { LIMITS, emptyQuestion, normalizeQuestions, normalizeTitle, validateQuestions } from "./questions.js";
 import { $, SHAPES, el, store } from "./ui.js";
 
 const STORAGE_KEY = "trivia:questions";
+const TITLE_KEY = "trivia:title";
 
 export function createEditor(onChange) {
   let questions = [];
   const list = $("editor-list");
+  const titleInput = $("game-title-input");
+
+  function setTitle(title) {
+    titleInput.value = title;
+    store.set(TITLE_KEY, title);
+  }
+
+  titleInput.addEventListener("input", () => store.set(TITLE_KEY, titleInput.value));
   const message = $("editor-message");
 
   function refreshStatus() {
@@ -126,7 +135,9 @@ export function createEditor(onChange) {
   async function loadSample() {
     const response = await fetch("data/ejemplo.json");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    questions = normalizeQuestions(await response.json());
+    const data = await response.json();
+    questions = normalizeQuestions(data);
+    setTitle(normalizeTitle(data));
     render();
   }
 
@@ -152,7 +163,10 @@ export function createEditor(onChange) {
     event.target.value = "";
     if (!file) return;
     try {
-      questions = normalizeQuestions(JSON.parse(await file.text()));
+      const data = JSON.parse(await file.text());
+      questions = normalizeQuestions(data);
+      // Si el archivo no trae nombre, se conserva el que ya había.
+      if (normalizeTitle(data)) setTitle(normalizeTitle(data));
       render();
       message.textContent = `Importadas ${questions.length} preguntas de ${file.name}.`;
     } catch (error) {
@@ -162,13 +176,15 @@ export function createEditor(onChange) {
   });
 
   $("editor-export").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify({ questions }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ title: titleInput.value.trim(), questions }, null, 2)], { type: "application/json" });
     const link = el("a", { href: URL.createObjectURL(blob), download: "preguntas-trivia.json" });
     link.click();
     URL.revokeObjectURL(link.href);
   });
 
   const saved = store.get(STORAGE_KEY);
+  const savedTitle = store.get(TITLE_KEY);
+  if (typeof savedTitle === "string") titleInput.value = savedTitle;
   if (Array.isArray(saved) && saved.length > 0) {
     questions = saved;
     render();
@@ -181,5 +197,6 @@ export function createEditor(onChange) {
 
   return {
     getQuestions: () => questions,
+    getTitle: () => titleInput.value.trim().slice(0, LIMITS.titleMax),
   };
 }

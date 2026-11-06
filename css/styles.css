@@ -1,14 +1,15 @@
 :root {
-  --bg: #2a1458;
-  --bg-deep: #1d0d40;
+  --bg: #f76300;
+  --bg-ink: #c24b00;
+  --veil: rgba(43, 20, 0, 0.18);
   --surface: #ffffff;
   --ink: #241a3a;
   --muted: #6b6480;
   --line: #d9d4e6;
   --on-bg: #ffffff;
-  --on-bg-muted: #cfc4ec;
-  --accent: #00a878;
-  --accent-ink: #00241a;
+  --on-bg-muted: #ffffff;
+  --accent: #ffffff;
+  --accent-ink: var(--bg-ink);
   --danger: #ffb3bd;
 
   --red: #c8102e;
@@ -72,24 +73,25 @@ h1, h2, p { margin: 0; }
   outline-offset: 2px;
 }
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
-.btn-primary:hover:not(:disabled) { filter: brightness(1.1); }
-.btn-ghost { background: transparent; color: var(--on-bg); border-color: rgba(255, 255, 255, 0.45); }
-.btn-ghost:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
+.btn-primary:hover:not(:disabled) { background: #fff3ea; }
+.btn-ghost { background: transparent; color: var(--on-bg); border-color: rgba(255, 255, 255, 0.75); }
+.btn-ghost:hover:not(:disabled) { background: var(--veil); }
 .btn-block { width: 100%; }
 .btn-large { min-height: 60px; padding: 0.7rem 2.2rem; font-size: 1.35rem; }
 .btn-small { min-height: 36px; padding: 0.25rem 0.75rem; font-size: 0.9rem; }
 
 .button-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.subtle-link { color: var(--on-bg-muted); font-weight: 600; }
+.subtle-link { color: var(--on-bg); font-weight: 700; }
 .status-text { min-height: 1.4em; margin-top: 0.6rem; font-weight: 600; }
 .pill {
   display: inline-block;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--veil);
   font-weight: 700;
   font-size: 1.15rem;
 }
+.pill:empty { display: none; }
 
 /* Colores de las opciones */
 [data-choice="0"] { --opt: var(--red); --opt-ink: #fff; }
@@ -120,6 +122,10 @@ h1, h2, p { margin: 0; }
 }
 .join-card label { display: block; margin-bottom: 0.3rem; font-weight: 700; }
 .join-card .status-text { color: #a50e27; }
+/* Sobre tarjetas blancas, el botón principal va en naranja oscuro para que se vea. */
+.join-card .btn-primary { background: var(--bg-ink); color: #ffffff; }
+.join-card .btn-primary:hover:not(:disabled) { background: #a84100; }
+.join-card .btn:focus-visible { outline-color: var(--bg-ink); }
 .input-big {
   width: 100%;
   min-height: 54px;
@@ -156,7 +162,7 @@ h1, h2, p { margin: 0; }
 .nick-badge {
   padding: 0.4rem 1.2rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--veil);
   font-size: 1.3rem;
   font-weight: 700;
   overflow-wrap: anywhere;
@@ -182,7 +188,7 @@ h1, h2, p { margin: 0; }
   height: 100dvh;
   padding-bottom: env(safe-area-inset-bottom);
 }
-.timer-track { flex: none; height: 10px; background: rgba(255, 255, 255, 0.18); }
+.timer-track { flex: none; height: 10px; background: var(--veil); }
 .timer-bar { width: 100%; height: 100%; background: var(--accent); transition: width 0.2s linear; }
 .play-header {
   flex: none;
@@ -260,7 +266,7 @@ h1, h2, p { margin: 0; }
   padding: 0.9rem 1rem;
   margin-bottom: 1rem;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--veil);
   font-weight: 700;
 }
 .pin-choice {
@@ -271,12 +277,12 @@ h1, h2, p { margin: 0; }
   padding: 1rem;
   margin-bottom: 1.25rem;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--veil);
 }
 .pin-choice-field { flex: 1 1 260px; min-width: 0; }
 .pin-choice label { display: block; margin-bottom: 0.35rem; font-weight: 700; }
-.pin-choice label span { color: var(--on-bg-muted); font-weight: 400; }
-.pin-input {
+.pin-choice label span { font-weight: 600; }
+.title-input, .pin-input {
   width: 100%;
   max-width: 220px;
   min-height: 48px;
@@ -289,15 +295,17 @@ h1, h2, p { margin: 0; }
   letter-spacing: 0.15em;
   color: var(--ink);
 }
-.pin-input::placeholder { font-size: 1.1rem; font-weight: 600; letter-spacing: normal; color: var(--muted); }
-.pin-input:focus-visible { outline: 3px solid #ffffff; outline-offset: 2px; }
-.pin-input[aria-invalid="true"] { border-color: var(--danger); }
-.pin-help { margin-top: 0.4rem; color: var(--on-bg-muted); font-size: 0.9rem; }
+.title-input { max-width: 420px; font-size: 1.25rem; letter-spacing: normal; }
+.title-input::placeholder, .pin-input::placeholder { font-size: 1.1rem; font-weight: 600; letter-spacing: normal; color: var(--muted); }
+.title-input:focus-visible, .pin-input:focus-visible { outline: 3px solid #ffffff; outline-offset: 2px; }
+.pin-input[aria-invalid="true"] { border-color: #7a0b1d; }
+.pin-help { margin-top: 0.4rem; font-size: 0.95rem; font-weight: 600; }
+.pin-choice-title { flex-basis: 100%; }
 .pin-preview { display: flex; align-items: center; gap: 1rem; min-width: 0; }
 .pin-preview-qr { flex: none; width: 120px; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #fff; }
 .pin-preview-qr svg { display: block; width: 100%; height: 100%; }
 .pin-preview-info { display: grid; gap: 0.5rem; justify-items: start; min-width: 0; }
-.pin-preview-url { font-size: 0.85rem; overflow-wrap: anywhere; color: var(--on-bg-muted); }
+.pin-preview-url { font-size: 0.9rem; font-weight: 600; overflow-wrap: anywhere; }
 
 .editor-toolbar {
   display: flex;
@@ -344,7 +352,15 @@ h1, h2, p { margin: 0; }
 .editor-correct { display: flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
 .editor-correct input { width: 18px; height: 18px; margin: 0; }
 .editor-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-.editor-errors { margin: 0.75rem 0 0; padding-left: 1.2rem; color: var(--danger); font-weight: 600; }
+.editor-errors {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: #a50e27;
+  font-weight: 600;
+}
+.editor-errors:empty { display: none; }
 .sticky-action {
   position: sticky;
   bottom: 0;
@@ -355,6 +371,17 @@ h1, h2, p { margin: 0; }
 
 /* Sala */
 .lobby { display: flex; flex-direction: column; gap: 1.2rem; min-height: 100dvh; }
+.game-title {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 900;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.game-title:empty { display: none; }
+.podium-subtitle { margin-top: -0.5rem; font-size: clamp(1.1rem, 2.6vw, 1.8rem); font-weight: 800; text-align: center; overflow-wrap: anywhere; }
+.podium-subtitle:empty { display: none; }
+.play-title { font-size: 1.15rem; font-weight: 800; overflow-wrap: anywhere; }
+.play-title:empty { display: none; }
 .lobby-join {
   display: flex;
   flex-wrap: wrap;
@@ -379,11 +406,11 @@ h1, h2, p { margin: 0; }
 .player-chips li {
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--veil);
   font-size: 1.1rem;
   font-weight: 700;
 }
-.player-chips .chip-more { background: transparent; color: var(--on-bg-muted); }
+.player-chips .chip-more { background: transparent; }
 
 /* Pregunta */
 .host-question, .host-reveal, .host-leaderboard, .host-end {
@@ -506,7 +533,7 @@ h1, h2, p { margin: 0; }
   text-align: center;
 }
 .podium-nick { width: 100%; font-size: clamp(1rem, 2.6vw, 2rem); font-weight: 800; overflow-wrap: anywhere; }
-.podium-score { margin-bottom: 0.4rem; color: var(--on-bg-muted); font-weight: 700; font-size: clamp(0.9rem, 2vw, 1.4rem); }
+.podium-score { margin-bottom: 0.4rem; font-weight: 700; font-size: clamp(0.9rem, 2vw, 1.4rem); }
 .podium-rank {
   display: grid;
   place-items: center;
@@ -515,14 +542,23 @@ h1, h2, p { margin: 0; }
   font-size: clamp(2rem, 6vw, 4.5rem);
   font-weight: 900;
 }
-.podium-1 .podium-rank { height: 240px; background: var(--yellow); color: var(--on-yellow); }
-.podium-2 .podium-rank { height: 170px; background: #cfd4dc; color: var(--ink); }
-.podium-3 .podium-rank { height: 120px; background: #d08b4c; color: #2b1400; }
+.podium-1 .podium-rank { height: 240px; background: #ffffff; color: var(--bg-ink); }
+.podium-2 .podium-rank { height: 170px; background: #ffe2cc; color: var(--bg-ink); }
+.podium-3 .podium-rank { height: 120px; background: #ffc89e; color: #7a3000; }
 
 @media (max-height: 700px) {
   .podium-1 .podium-rank { height: 150px; }
   .podium-2 .podium-rank { height: 110px; }
   .podium-3 .podium-rank { height: 80px; }
+}
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

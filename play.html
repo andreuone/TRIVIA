@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#2a1458">
+  <meta name="theme-color" content="#f76300">
   <title>Trivia: jugar</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -13,6 +13,7 @@
   </section>
 
   <section id="screen-waiting" class="screen play-message" hidden>
+    <p id="waiting-title" class="play-title"></p>
     <p class="big-text">¡Ya estás dentro!</p>
     <p id="waiting-nick" class="nick-badge"></p>
     <p>Mira la pantalla: la partida empieza pronto.</p>
@@ -48,6 +49,7 @@
   </section>
 
   <section id="screen-end" class="screen play-message" hidden>
+    <p id="end-title" class="play-title"></p>
     <p class="big-text">¡Fin de la partida!</p>
     <p id="end-position" class="result-title"></p>
     <p id="end-score" class="result-detail"></p>

@@ -1,6 +1,7 @@
 // Validación de preguntas, sin DOM, compartida por el editor y las pruebas.
 
 export const LIMITS = {
+  titleMax: 60,
   textMax: 300,
   optionMax: 120,
   timeMin: 5,
@@ -23,6 +24,12 @@ export function normalizeQuestions(data) {
     timeLimit: q?.timeLimit ?? LIMITS.defaultTime,
     imageUrl: typeof q?.imageUrl === "string" ? q.imageUrl : "",
   }));
+}
+
+// El nombre de la trivia es opcional; una lista sin objeto envolvente no lo trae.
+export function normalizeTitle(data) {
+  const title = Array.isArray(data) ? "" : data?.title;
+  return typeof title === "string" ? title.trim().slice(0, LIMITS.titleMax) : "";
 }
 
 function isHttpsUrl(value) {
