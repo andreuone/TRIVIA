@@ -132,16 +132,60 @@ function randomPin() {
   return String(100000 + value);
 }
 
+const joinUrlFor = (gamePin) => new URL(`index.html?pin=${gamePin}`, location.href);
+
+function qrSvg(text, margin) {
+  const qr = qrcode(0, "M");
+  qr.addData(text);
+  qr.make();
+  return qr.createSvgTag({ cellSize: 8, margin, scalable: true });
+}
+
+// PIN elegido: vacío significa aleatorio.
+const customPinInput = $("custom-pin");
+
+function updatePinPreview() {
+  customPinInput.value = customPinInput.value.replace(/\D/g, "");
+  const value = customPinInput.value;
+  const valid = /^\d{6}$/.test(value);
+  customPinInput.setAttribute("aria-invalid", String(value !== "" && !valid));
+  $("pin-preview").hidden = !valid;
+  if (valid) {
+    const url = joinUrlFor(value).href;
+    $("pin-preview-url").textContent = url;
+    $("pin-preview-qr").innerHTML = qrSvg(url, 2);
+  }
+}
+
+customPinInput.addEventListener("input", updatePinPreview);
+
+$("pin-preview-download").addEventListener("click", () => {
+  const value = customPinInput.value;
+  const blob = new Blob([qrSvg(joinUrlFor(value).href, 4)], { type: "image/svg+xml" });
+  const link = el("a", { href: URL.createObjectURL(blob), download: `qr-trivia-${value}.svg` });
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
+
 async function createGame() {
   $("create-button").disabled = true;
   showBanner(null);
+  const customPin = customPinInput.value;
+  if (customPin && !/^\d{6}$/.test(customPin)) {
+    showBanner("El PIN debe tener 6 dígitos, o déjalo vacío para uno aleatorio.");
+    customPinInput.focus();
+    $("create-button").disabled = false;
+    return;
+  }
+
   try {
     uid = await ensureUser();
     questions = structuredClone(editor.getQuestions());
 
-    // Sin lecturas: si el PIN ya existe, las reglas rechazan la escritura y se prueba con otro.
+    // Sin lecturas: si el PIN ya existe, las reglas rechazan la escritura. Con PIN aleatorio
+    // se prueba con otro; con PIN elegido se avisa, porque solo sirve para una partida.
     for (let attempt = 0; ; attempt += 1) {
-      pin = randomPin();
+      pin = customPin || randomPin();
       gameRef = doc(db, "games", pin);
       try {
         await setDoc(gameRef, {
@@ -153,6 +197,12 @@ async function createGame() {
         });
         break;
       } catch (error) {
+        if (error.code === "permission-denied" && customPin) {
+          showBanner(`El PIN ${customPin} ya se usó en otra partida. Elige otro o déjalo vacío.`);
+          customPinInput.focus();
+          $("create-button").disabled = false;
+          return;
+        }
         if (error.code !== "permission-denied" || attempt >= 4) throw error;
       }
     }
@@ -169,14 +219,10 @@ async function createGame() {
 }
 
 function showLobby() {
-  const joinUrl = new URL(`index.html?pin=${pin}`, location.href);
+  const joinUrl = joinUrlFor(pin);
   $("lobby-url").textContent = joinUrl.host + joinUrl.pathname.replace(/index\.html$/, "");
   $("lobby-pin").textContent = `${pin.slice(0, 3)} ${pin.slice(3)}`;
-
-  const qr = qrcode(0, "M");
-  qr.addData(joinUrl.href);
-  qr.make();
-  $("lobby-qr").innerHTML = qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
+  $("lobby-qr").innerHTML = qrSvg(joinUrl.href, 0);
 
   setView("lobby");
   renderLobbyPlayers();

@@ -263,6 +263,42 @@ h1, h2, p { margin: 0; }
   background: rgba(255, 255, 255, 0.14);
   font-weight: 700;
 }
+.pin-choice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+}
+.pin-choice-field { flex: 1 1 260px; min-width: 0; }
+.pin-choice label { display: block; margin-bottom: 0.35rem; font-weight: 700; }
+.pin-choice label span { color: var(--on-bg-muted); font-weight: 400; }
+.pin-input {
+  width: 100%;
+  max-width: 220px;
+  min-height: 48px;
+  padding: 0.35rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+}
+.pin-input::placeholder { font-size: 1.1rem; font-weight: 600; letter-spacing: normal; color: var(--muted); }
+.pin-input:focus-visible { outline: 3px solid #ffffff; outline-offset: 2px; }
+.pin-input[aria-invalid="true"] { border-color: var(--danger); }
+.pin-help { margin-top: 0.4rem; color: var(--on-bg-muted); font-size: 0.9rem; }
+.pin-preview { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.pin-preview-qr { flex: none; width: 120px; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #fff; }
+.pin-preview-qr svg { display: block; width: 100%; height: 100%; }
+.pin-preview-info { display: grid; gap: 0.5rem; justify-items: start; min-width: 0; }
+.pin-preview-url { font-size: 0.85rem; overflow-wrap: anywhere; color: var(--on-bg-muted); }
+
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;

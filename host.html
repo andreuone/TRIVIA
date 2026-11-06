@@ -24,6 +24,22 @@
       </div>
     </div>
 
+    <div class="pin-choice">
+      <div class="pin-choice-field">
+        <label for="custom-pin">PIN de la sala <span>(opcional)</span></label>
+        <input id="custom-pin" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="6"
+               autocomplete="off" placeholder="Aleatorio" aria-describedby="custom-pin-help">
+        <p id="custom-pin-help" class="pin-help">Déjalo vacío para un PIN aleatorio, o elige uno para imprimir el QR con antelación. Cada PIN sirve para una sola partida.</p>
+      </div>
+      <div id="pin-preview" class="pin-preview" hidden>
+        <div id="pin-preview-qr" class="pin-preview-qr" role="img" aria-label="Código QR para unirse con este PIN"></div>
+        <div class="pin-preview-info">
+          <p id="pin-preview-url" class="pin-preview-url"></p>
+          <button id="pin-preview-download" class="btn btn-ghost btn-small" type="button">Descargar QR</button>
+        </div>
+      </div>
+    </div>
+
     <div class="editor-toolbar">
       <h2 id="editor-count">Preguntas</h2>
       <div class="button-row">
